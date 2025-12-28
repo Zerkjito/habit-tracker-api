@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  habits    Habit[]
+}
+
+model Habit {
+  id        String     @id @default(uuid())
+  overview  String?
+  isActive  Boolean    @default(true)
+  frequence Frequence
+  goal      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  ownerId   String
+  registers Register[]
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+}
+
+model Register {
+  id        String   @id @default(uuid())
+  habitId   String
+  completed Boolean
+  createdAt DateTime @default(now())
+
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+}
+
+enum Frequence {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
