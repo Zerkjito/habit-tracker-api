@@ -10,7 +10,11 @@ import registerRoutes from './routes/registerRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
 const app = express();
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
+
+// Body parsing middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // optional (mainly for legacy frontend)
 
 // API routes
 app.use('/auth', authRoutes);
